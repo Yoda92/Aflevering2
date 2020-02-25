@@ -1,0 +1,17 @@
+@startuml
+skinparam linetype ortho
+skinparam monochrome true
+skinparam shadowing false
+
+frame "cd Baz" {
+
+enum Foo {
+
+}
+
+class Bar {
+    + void Main()
+}
+
+}
+@enduml
