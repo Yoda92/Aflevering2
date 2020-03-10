@@ -5,12 +5,16 @@ skinparam shadowing false
 
 frame "cd Baz" {
 
-enum Foo {
+interface IUsbCharger {
+    
+}
+
+class StationControl {
 
 }
 
-class Bar {
-    + void Main()
+class UsbChargerSimulator {
+    
 }
 
 }
