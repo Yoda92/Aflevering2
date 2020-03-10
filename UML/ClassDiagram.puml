@@ -35,7 +35,43 @@ class StationControl {
     - HandleRFIDRead(\n  s: Object\n  e: DoorStateEventArgs)
 }
 
+interface IUSBCharger {
+    + CurrentValueEvent: event
+}
 
+class CurrentValueEventArgs {
+    + Current: int
+}
+
+class USBCharger {
+    + CurrentValueEvent: event
+    + setCurrent(current: int): void
+    - OnCurrentValueChanged(\n  e: CurrentValueEventArgs): void
+}
+
+interface IChargeControl {
+    
+}
+
+class ChargeControl {
+    - HandleCurrentValueChanged(\n  s: Object\n  e: CurrentValueEventArgs)
+}
+
+interface IDisplay {
+
+}
+
+class Display {
+
+}
+
+interface ILogFile {
+
+}
+
+class LogFile {
+
+}
 
 
 Door .up.|> IDoor
@@ -46,4 +82,15 @@ RFIDReader .up.|> IRFIDReader
 RFIDReader ..> RFIDReadEventArgs
 IRFIDReader ..> RFIDReadEventArgs
 StationControl ..> IRFIDReader
+USBCharger .up.|> IUSBCharger
+USBCharger ..> CurrentValueEventArgs
+IUSBCharger ..> CurrentValueEventArgs
+ChargeControl ..> IUSBCharger
+StationControl ..> IChargeControl
+ChargeControl .up.|> IChargeControl
+LogFile .up.|> ILogFile
+StationControl ..> ILogFile
+Display .up.|> IDisplay
+StationControl ..> IDisplay
+ChargeControl ..> IDisplay 
 @enduml
