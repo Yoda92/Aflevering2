@@ -1,5 +1,6 @@
 @startuml
 hide circle
+skinparam classAttributeIconSize 0
 
 interface IDoor <<interface>> {
     + DoorStateChangedEvent: event
@@ -32,52 +33,79 @@ class RFIDReadEventArgs {
 }
 
 class StationControl {
+    - _oldID: int
+    - _state: LadeskabState
     - HandleDoorStateChanged(\n  s: Object\n  e: DoorStateEventArgs)
     - HandleRFIDRead(\n  s: Object\n  e: DoorStateEventArgs)
+    - CheckID(newID: int): bool
+}
+
+enum LadeskabState <<enum>>{
+    Available
+    DoorOpen
+    Locked
 }
 
 interface IUSBCharger <<interface>>{
     + CurrentValueEvent: event
+    + PhoneConnectionEvent: event
+    + StartCharge(): void
+    + StopCharge(): void
 }
 
 class CurrentValueEventArgs {
-    + Current: int
+    + Current: double
+}
+
+class PhoneConnectionEventArgs {
+    + Connected: bool
 }
 
 class USBCharger {
     + CurrentValueEvent: event
-    + setCurrent(current: int): void
+    + PhoneConnectionEvent: event
+    + StartCharge(): void
+    + StopCharge(): void
     - OnCurrentValueChanged(\n  e: CurrentValueEventArgs): void
+    - OnPhoneConnectionChanged(\n  e: PhoneConnectionEventArgs): void
 }
 
 interface IChargeControl <<interface>>{
-    
+    +/- IsConnected: bool
+    + StartCharge(): void
+    + StopCharge(): void
 }
 
 class ChargeControl {
+    +/- IsConnected: bool
+    + StartCharge(): void
+    + StopCharge(): void
     - HandleCurrentValueChanged(\n  s: Object\n  e: CurrentValueEventArgs)
+    - HandlePhoneConnectionChanged(\n  s: Object\n  e: PhoneConnectionEventArgs)
 }
 
 interface IDisplay <<interface>>{
-
+    + DisplayUserInstructions(s: string): void
+    + DisplayChargingMessage(s: string): void
 }
 
 class Display {
-
+    + DisplayUserInstructions(s: string): void
+    + DisplayChargingMessage(s: string): void
 }
 
 interface ILogFile <<interface>>{
-
+    + LogDoorLocked(ID: int)
+    + LogDoorUnlocked(ID: int)
 }
 
 class LogFile {
-
+    + LogDoorLocked(ID: int)
+    + LogDoorUnlocked(ID: int)
 }
 
 
 Door .up.|> IDoor
-Door ..> DoorStateEventArgs
-IDoor ..> DoorStateEventArgs
 StationControl --> IDoor
 RFIDReader .up.|> IRFIDReader
 RFIDReader ..> RFIDReadEventArgs
@@ -86,6 +114,8 @@ StationControl ..> IRFIDReader
 USBCharger .up.|> IUSBCharger
 USBCharger ..> CurrentValueEventArgs
 IUSBCharger ..> CurrentValueEventArgs
+USBCharger ..> PhoneConnectionEventArgs
+IUSBCharger ..> PhoneConnectionEventArgs
 ChargeControl ..> IUSBCharger
 StationControl --> IChargeControl
 ChargeControl .up.|> IChargeControl
@@ -94,4 +124,11 @@ StationControl --> ILogFile
 Display .up.|> IDisplay
 StationControl --> IDisplay
 ChargeControl --> IDisplay 
+StationControl --> LadeskabState
+StationControl ..> RFIDReadEventArgs
+StationControl ..> DoorStateEventArgs
+IDoor ..> DoorStateEventArgs
+Door ..> DoorStateEventArgs
+ChargeControl ..> CurrentValueEventArgs
+ChargeControl ..> PhoneConnectionEventArgs
 @enduml
