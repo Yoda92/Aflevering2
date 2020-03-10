@@ -8,7 +8,7 @@ interface IDoor <<interface>> {
     + UnlockDoor(): void
 }
 
-class Door {
+class DoorSimulator {
     - _lockedState: bool
     + DoorStateChangedEvent: event
     + SetDoorState(open: bool): void
@@ -25,7 +25,7 @@ interface IRFIDReader <<interface>>{
     + RFIDReadEvent: event
 }
 
-class RFIDReader {
+class RFIDReaderSimulator {
     + RFIDReadEvent: event
     + ReadRFID(int: ID): void
     - OnRFIDRead(\n  e: RFIDReadEventArgs): void
@@ -61,7 +61,7 @@ class CurrentValueEventArgs {
 }
 
 
-class USBCharger {
+class USBChargerSimulator {
     + CurrentValueEvent: event
     + StartCharge(): void
     + StopCharge(): void
@@ -103,14 +103,14 @@ class LogFile {
 }
 
 
-Door .up.|> IDoor
+DoorSimulator .up.|> IDoor
 StationControl --> IDoor
-RFIDReader .up.|> IRFIDReader
-RFIDReader ..> RFIDReadEventArgs
+RFIDReaderSimulator .up.|> IRFIDReader
+RFIDReaderSimulator ..> RFIDReadEventArgs
 IRFIDReader ..> RFIDReadEventArgs
 StationControl ..> IRFIDReader
-USBCharger .up.|> IUSBCharger
-USBCharger ..> CurrentValueEventArgs
+USBChargerSimulator .up.|> IUSBCharger
+USBChargerSimulator ..> CurrentValueEventArgs
 IUSBCharger ..> CurrentValueEventArgs
 ChargeControl ..> IUSBCharger
 StationControl --> IChargeControl
@@ -124,6 +124,6 @@ StationControl --> LadeskabState
 StationControl ..> RFIDReadEventArgs
 StationControl ..> DoorStateEventArgs
 IDoor ..> DoorStateEventArgs
-Door ..> DoorStateEventArgs
+DoorSimulator ..> DoorStateEventArgs
 ChargeControl ..> CurrentValueEventArgs
 @enduml
