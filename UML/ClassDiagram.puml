@@ -1,6 +1,7 @@
 @startuml
+hide circle
 
-interface IDoor {
+interface IDoor <<interface>> {
     + DoorStateChangedEvent: event
     + SetDoorLocked(locked: boolean): void
 }
@@ -16,7 +17,7 @@ class DoorStateEventArgs {
     + Open: bool
 }
 
-interface IRFIDReader {
+interface IRFIDReader <<interface>>{
     + RFIDReadEvent: event
 }
 
@@ -35,7 +36,7 @@ class StationControl {
     - HandleRFIDRead(\n  s: Object\n  e: DoorStateEventArgs)
 }
 
-interface IUSBCharger {
+interface IUSBCharger <<interface>>{
     + CurrentValueEvent: event
 }
 
@@ -49,7 +50,7 @@ class USBCharger {
     - OnCurrentValueChanged(\n  e: CurrentValueEventArgs): void
 }
 
-interface IChargeControl {
+interface IChargeControl <<interface>>{
     
 }
 
@@ -57,7 +58,7 @@ class ChargeControl {
     - HandleCurrentValueChanged(\n  s: Object\n  e: CurrentValueEventArgs)
 }
 
-interface IDisplay {
+interface IDisplay <<interface>>{
 
 }
 
@@ -65,7 +66,7 @@ class Display {
 
 }
 
-interface ILogFile {
+interface ILogFile <<interface>>{
 
 }
 
@@ -77,7 +78,7 @@ class LogFile {
 Door .up.|> IDoor
 Door ..> DoorStateEventArgs
 IDoor ..> DoorStateEventArgs
-StationControl ..> IDoor
+StationControl --> IDoor
 RFIDReader .up.|> IRFIDReader
 RFIDReader ..> RFIDReadEventArgs
 IRFIDReader ..> RFIDReadEventArgs
@@ -86,11 +87,11 @@ USBCharger .up.|> IUSBCharger
 USBCharger ..> CurrentValueEventArgs
 IUSBCharger ..> CurrentValueEventArgs
 ChargeControl ..> IUSBCharger
-StationControl ..> IChargeControl
+StationControl --> IChargeControl
 ChargeControl .up.|> IChargeControl
 LogFile .up.|> ILogFile
-StationControl ..> ILogFile
+StationControl --> ILogFile
 Display .up.|> IDisplay
-StationControl ..> IDisplay
-ChargeControl ..> IDisplay 
+StationControl --> IDisplay
+ChargeControl --> IDisplay 
 @enduml
