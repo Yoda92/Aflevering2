@@ -1,0 +1,49 @@
+@startuml
+
+interface IDoor {
+    + DoorStateChangedEvent: event
+    + SetDoorLocked(locked: boolean): void
+}
+
+class Door {
+    + DoorStateChangedEvent: event
+    + SetDoorState(open: bool): void
+    + SetDoorLocked(locked: boolean): void
+    - OnDoorStateChanged(\n  e: DoorStateEventArgs): void
+}
+
+class DoorStateEventArgs {
+    + Open: bool
+}
+
+interface IRFIDReader {
+    + RFIDReadEvent: event
+}
+
+class RFIDReader {
+    + RFIDReadEvent: event
+    + ReadRFID(int: ID): void
+    - OnRFIDRead(\n  e: RFIDReadEventArgs): void
+}
+
+class RFIDReadEventArgs {
+    + ID: int
+}
+
+class StationControl {
+    - HandleDoorStateChanged(\n  s: Object\n  e: DoorStateEventArgs)
+    - HandleRFIDRead(\n  s: Object\n  e: DoorStateEventArgs)
+}
+
+
+
+
+Door .up.|> IDoor
+Door ..> DoorStateEventArgs
+IDoor ..> DoorStateEventArgs
+StationControl ..> IDoor
+RFIDReader .up.|> IRFIDReader
+RFIDReader ..> RFIDReadEventArgs
+IRFIDReader ..> RFIDReadEventArgs
+StationControl ..> IRFIDReader
+@enduml
