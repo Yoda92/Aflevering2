@@ -4,13 +4,16 @@ skinparam classAttributeIconSize 0
 
 interface IDoor <<interface>> {
     + DoorStateChangedEvent: event
-    + SetDoorLocked(locked: boolean): void
+    + LockDoor(): void
+    + UnlockDoor(): void
 }
 
 class Door {
+    - _lockedState: bool
     + DoorStateChangedEvent: event
     + SetDoorState(open: bool): void
-    + SetDoorLocked(locked: boolean): void
+    + LockDoor(): void
+    + UnlockDoor(): void
     - OnDoorStateChanged(\n  e: DoorStateEventArgs): void
 }
 
@@ -48,40 +51,35 @@ enum LadeskabState <<enum>>{
 
 interface IUSBCharger <<interface>>{
     + CurrentValueEvent: event
-    + PhoneConnectionEvent: event
     + StartCharge(): void
     + StopCharge(): void
+    -/+ Connected: bool
 }
 
 class CurrentValueEventArgs {
     + Current: double
 }
 
-class PhoneConnectionEventArgs {
-    + Connected: bool
-}
 
 class USBCharger {
     + CurrentValueEvent: event
-    + PhoneConnectionEvent: event
     + StartCharge(): void
     + StopCharge(): void
     - OnCurrentValueChanged(\n  e: CurrentValueEventArgs): void
-    - OnPhoneConnectionChanged(\n  e: PhoneConnectionEventArgs): void
+    -/+ Connected: bool
 }
 
 interface IChargeControl <<interface>>{
-    +/- IsConnected: bool
+    + IsConnected(): bool
     + StartCharge(): void
     + StopCharge(): void
 }
 
 class ChargeControl {
-    +/- IsConnected: bool
+    + IsConnected(): bool
     + StartCharge(): void
     + StopCharge(): void
     - HandleCurrentValueChanged(\n  s: Object\n  e: CurrentValueEventArgs)
-    - HandlePhoneConnectionChanged(\n  s: Object\n  e: PhoneConnectionEventArgs)
 }
 
 interface IDisplay <<interface>>{
@@ -114,8 +112,6 @@ StationControl ..> IRFIDReader
 USBCharger .up.|> IUSBCharger
 USBCharger ..> CurrentValueEventArgs
 IUSBCharger ..> CurrentValueEventArgs
-USBCharger ..> PhoneConnectionEventArgs
-IUSBCharger ..> PhoneConnectionEventArgs
 ChargeControl ..> IUSBCharger
 StationControl --> IChargeControl
 ChargeControl .up.|> IChargeControl
@@ -130,5 +126,4 @@ StationControl ..> DoorStateEventArgs
 IDoor ..> DoorStateEventArgs
 Door ..> DoorStateEventArgs
 ChargeControl ..> CurrentValueEventArgs
-ChargeControl ..> PhoneConnectionEventArgs
 @enduml
