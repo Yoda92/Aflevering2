@@ -52,10 +52,33 @@ namespace CoreTest
                 Throws.TypeOf<Exception>());
         }
 
-        [Test]
-        public void HandleCurrentChangedToZero()
+        [TestCase(0.01)]
+        [TestCase(3.0)]
+        [TestCase(5.0)]
+        public void HandleCurrentChangedBetweenZeroAndFive(double current)
         {
-            
+            _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
+            _disp.Received().DisplayChargingMessage(Arg.Is<string>("Charging done..."));
+        }
+
+        [TestCase(5.01)]
+        [TestCase(25.0)]
+        [TestCase(200.3)]
+        [TestCase(500.0)]
+        public void HandleCurrentChangedBetweenFiveAndFiveHundred(double current)
+        {
+            _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
+            _disp.Received().DisplayChargingMessage(Arg.Is<String>("Charging...")); 
+        }
+
+        [TestCase(500.01)]
+        [TestCase(700)]
+        [TestCase(120000)]
+        public void HandleCurrentChangedOverFiveHundred(double current)
+        {
+            _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
+            _disp.Received().DisplayChargingMessage(Arg.Is<String>("Error - Stopped Charging!"));
+            _charger.Received().StopCharge();
         }
     }
 }
