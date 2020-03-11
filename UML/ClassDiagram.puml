@@ -9,11 +9,12 @@ interface IDoor <<interface>> {
 }
 
 class DoorSimulator {
-    - _lockedState: bool
+    +/- IsLocked: bool
     + DoorStateChangedEvent: event
-    + SetDoorState(open: bool): void
     + LockDoor(): void
     + UnlockDoor(): void
+    + SimulateDoorOpen(): void
+    + SimulateDoorClose(): void
     - OnDoorStateChanged(\n  e: DoorStateEventArgs): void
 }
 
@@ -124,6 +125,6 @@ StationControl --> LadeskabState
 StationControl ..> RFIDReadEventArgs
 StationControl ..> DoorStateEventArgs
 IDoor ..> DoorStateEventArgs
-DoorSimulator ..> DoorStateEventArgs
+DoorSimulator ..> DoorStateEventArgs 
 ChargeControl ..> CurrentValueEventArgs
 @enduml
