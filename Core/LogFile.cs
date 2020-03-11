@@ -11,12 +11,31 @@ namespace Core
     {
         public void LogDoorLocked(int ID)
         {
-            File.AppendAllText(@"C:\Users\Public\TestFolder\Log.txt", "Door Locked with ID: " + ID + "\n");
+            if (!File.Exists(@"\Log.txt"))
+            {
+                File.Create(@"\Log.txt");
+                File.AppendAllText(@"\Log.txt", "Log Created");
+            }
+            else
+            {
+                File.AppendAllText(@"\Log.txt", "Door Locked with ID: " + ID + "\n");
+            }
+            
         }
 
         public void LogDoorUnlocked(int ID)
         {
-            File.AppendAllText(@"C:\Users\Public\TestFolder\Log.txt", "Door Locked with ID: " + ID + "\n");
+            if (!File.Exists(@"\Log.txt"))
+            {
+                File.Create(@"\Log.txt");
+                File.AppendAllText(@"\Log.txt", "Log Created");
+            }
+
+            else
+            {
+                File.AppendAllText(@"\Log.txt", "Door Locked with ID: " + ID + "\n");
+            }
+            
         }
     }
 }
