@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using UsbSimulator;
+
 
 namespace Core
 {
 
-    class RFIDReaderSimulator : IRFIDReader
+    public class RFIDReaderSimulator : IRFIDReader
     {
         public void SimulateReadRFID(int id)
         {
