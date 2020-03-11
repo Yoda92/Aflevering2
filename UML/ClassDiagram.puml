@@ -28,7 +28,7 @@ interface IRFIDReader <<interface>>{
 
 class RFIDReaderSimulator {
     + RFIDReadEvent: event
-    + ReadRFID(int: ID): void
+    + SimulateReadRFID(int: ID): void
     - OnRFIDRead(\n  e: RFIDReadEventArgs): void
 }
 
@@ -113,7 +113,7 @@ StationControl ..> IRFIDReader
 USBChargerSimulator .up.|> IUSBCharger
 USBChargerSimulator ..> CurrentValueEventArgs
 IUSBCharger ..> CurrentValueEventArgs
-ChargeControl ..> IUSBCharger
+ChargeControl --> IUSBCharger
 StationControl --> IChargeControl
 ChargeControl .up.|> IChargeControl
 LogFile .up.|> ILogFile
