@@ -10,8 +10,6 @@ namespace CoreTest
     class TestDisplay
     {
         private Core.Display _d;
-        private StringWriter stringWriter;
-        private TextWriter originalOutput;
         [SetUp]
         public void Setup()
         {
