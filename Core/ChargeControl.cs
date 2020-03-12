@@ -16,7 +16,7 @@ namespace Core
         
         public bool IsConnected()
         {
-            return false;
+            return _charger.Connected;
         }
 
         public void StartCharge()
