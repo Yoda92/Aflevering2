@@ -21,11 +21,12 @@ namespace Core
 
         public void StartCharge()
         {
-            
+           _charger.StartCharge(); 
         }
 
         public void StopCharge()
         {
+            _charger.StopCharge();
         }
 
         private void HandleCurrentValueChanged(Object o, CurrentEventArgs args)
