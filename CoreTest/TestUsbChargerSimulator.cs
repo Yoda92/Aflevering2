@@ -100,6 +100,8 @@ namespace UsbSimulator.Test
                 pause.Set();
             };
 
+            _uut.SimulateConnected(true);
+
             // Start
             _uut.StartCharge();
 
@@ -127,6 +129,7 @@ namespace UsbSimulator.Test
                 pause.Set();
             };
 
+            _uut.SimulateConnected(true);
 
             // Start
             _uut.StartCharge();
