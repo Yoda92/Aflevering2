@@ -17,6 +17,7 @@ namespace UsbSimulator.Test
         public void Setup()
         {
             _uut = new UsbChargerSimulator();
+            _uut.SimulateConnected(true);
         }
 
         [Test]
@@ -99,8 +100,6 @@ namespace UsbSimulator.Test
                 lastValue = args.Current;
                 pause.Set();
             };
-
-            _uut.SimulateConnected(true);
 
             // Start
             _uut.StartCharge();
