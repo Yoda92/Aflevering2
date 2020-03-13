@@ -11,14 +11,14 @@ namespace Core
 {
     public class StationControl
     {
-        private enum LadeskabState
+        public enum LadeskabState
         {
             Available,
             Locked,
             DoorOpen
         };
 
-        private LadeskabState _state;
+        public LadeskabState _state {get; set;}
         private int _oldId;
 
         private IDisplay _display;

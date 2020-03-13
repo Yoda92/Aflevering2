@@ -2,7 +2,7 @@ using System;
 
 namespace Core
 {
-    public class DoorStateEventArgs
+    public class DoorStateEventArgs : EventArgs
     {
         public bool Open { get; set; }
     }

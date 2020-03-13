@@ -3,7 +3,6 @@ using Core;
 using NSubstitute;
 using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
-using UsbSimulator;
 
 namespace CoreTest
 {
