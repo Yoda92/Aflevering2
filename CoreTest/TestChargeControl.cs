@@ -58,7 +58,7 @@ namespace CoreTest
         public void HandleCurrentChangedBetweenZeroAndFive(double current)
         {
             _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
-            _disp.Received().DisplayChargingMessage(Arg.Is<string>("Charging done..."));
+            _disp.Received().DisplayChargingMessage(Arg.Is<string>("Not charging..."));
         }
 
         [TestCase(5.01)]
