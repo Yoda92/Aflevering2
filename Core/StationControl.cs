@@ -35,6 +35,8 @@ namespace Core
             _RFIDReader = RFIDReader;
             _usbCharger = usbCharger;
 
+            _state = LadeskabState.Available;
+
             _door.DoorStateChangedEvent += HandleDoorStateChanged;
             _RFIDReader.RFIDReadEvent += HandleRFIDRead;
         }
@@ -47,7 +49,11 @@ namespace Core
                     if (!e.Open)
                     {
                         _state = LadeskabState.Available;
-                        _display.DisplayUserInstructions("Indlæs RFID.");
+                        _display.DisplayUserInstructions("Dør er lukket. Indlæs RFID.");
+                    }
+                    else
+                    { 
+                        _display.DisplayUserInstructions("Dør er åben");
                     }
                     break;
 
@@ -55,7 +61,11 @@ namespace Core
                     if (e.Open)
                     {
                         _state = LadeskabState.DoorOpen;
-                        _display.DisplayUserInstructions("Tilslut telefon.");
+                        _display.DisplayUserInstructions("Dør er åben. Tilslut telefon.");
+                    }
+                    else
+                    {
+                        _display.DisplayUserInstructions("Dør er lukket. Indlæs RFID");
                     }
                     break;
 
@@ -73,11 +83,11 @@ namespace Core
                     if (_usbCharger.Connected)
                     {
                         _door.LockDoor();
-                        _usbCharger.StartCharge();
                         _logfile.LogDoorLocked(e.ID);
                         _oldId = e.ID;
                         _state = LadeskabState.Locked;
                         _display.DisplayUserInstructions("Ladeskab optaget.");
+                        _usbCharger.StartCharge();
                     }
                     else
                     {
@@ -86,6 +96,7 @@ namespace Core
                     break;
 
                 case LadeskabState.DoorOpen:
+                    _display.DisplayUserInstructions("Luk døren.");
                     break;
 
                 case LadeskabState.Locked:

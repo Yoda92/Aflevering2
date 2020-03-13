@@ -4,6 +4,7 @@ namespace Core
 {
     public class ChargeControl : IChargeControl
     {
+        private bool isCharging;
         private IDisplay _disp;
         private IUsbCharger _charger;
 
@@ -12,6 +13,7 @@ namespace Core
             _disp = disp;
             _charger = charger;
             _charger.CurrentValueEvent += HandleCurrentValueChanged;
+            isCharging = false;
         }
 
         public bool IsConnected()
@@ -36,12 +38,17 @@ namespace Core
             {
                 //In a real system this would be handled otherwise, but we wanted to experiment with testing errors
                 throw new Exception("Subzero current read");
-            } else if (current <= 5)
+            } 
+            else if (current <= 5)
             {
-                _disp.DisplayChargingMessage("Charging done...");
+                _disp.DisplayChargingMessage("Not charging...");
             } else if (current <= 500)
             {
-                _disp.DisplayChargingMessage("Charging...");
+                if (!isCharging)
+                {
+                    _disp.DisplayChargingMessage("Charging...");
+                    isCharging = true;
+                }
             }
             else // Above 500mA
             {
