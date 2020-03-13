@@ -6,9 +6,8 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Core;
-using UsbSimulator;
 
-namespace Ladeskab
+namespace Core
 {
     public class StationControl
     {
@@ -35,6 +34,9 @@ namespace Ladeskab
             _logfile = logfile;
             _RFIDReader = RFIDReader;
             _usbCharger = usbCharger;
+
+            _door.DoorStateChangedEvent += HandleDoorStateChanged;
+            _RFIDReader.RFIDReadEvent += HandleRFIDRead;
         }
 
         private void HandleDoorStateChanged(Object s, DoorStateEventArgs e)
