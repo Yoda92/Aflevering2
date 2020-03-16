@@ -37,5 +37,59 @@ namespace CoreTest
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
             Assert.That(_sc._state, Is.EqualTo(outputState));
         }
+
+        [TestCase(10, "Ladeskab optaget.")]
+        public void HandleRFIDReadAvaibleConnectedTest(int id, string outputString)
+        {
+            _sc._state = StationControl.LadeskabState.Available;
+            _usbCharger.Connected = true;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {ID = id});
+            _door.Received().LockDoor();
+            _logfile.Received().LogDoorLocked(id);
+            _usbCharger.Received().StartCharge();
+            _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
+            Assert.That(_sc._state, Is.EqualTo(StationControl.LadeskabState.Locked));
+            Assert.That(_sc._oldId, Is.EqualTo(id));
+        }
+
+        [TestCase("Tilslutningsfejl.")]
+        public void HandleRFIDReadAvaibleNotConnectedTest(string outputString)
+        {
+            _sc._state = StationControl.LadeskabState.Available;
+            _usbCharger.Connected = false;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {});
+            _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
+        }
+
+        [TestCase("Luk døren.")]
+        public void HandleRFIDReadDoorOpenTest(string outputString)
+        {
+            _sc._state = StationControl.LadeskabState.DoorOpen;
+            _usbCharger.Connected = false;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {});
+            _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
+        }
+
+        [TestCase(10, "Fjern telefon.")]
+        public void HandleRFIDReadLockedEqualTest(int id, string outputString)
+        {
+            _sc._state = StationControl.LadeskabState.Locked;
+            _sc._oldId = id;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {ID = id });
+            _door.Received().UnlockDoor();
+            _logfile.Received().LogDoorUnlocked(id);
+            _usbCharger.Received().StopCharge();
+            _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
+            Assert.That(_sc._state, Is.EqualTo(StationControl.LadeskabState.Available));
+        }
+
+        [TestCase(10, "Forkert RFID tag.")]
+        public void HandleRFIDReadLockedNotEqualTest(int id, string outputString)
+        {
+            _sc._state = StationControl.LadeskabState.Locked;
+            _sc._oldId = id + 1;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {});
+            _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
+        }
     }
 }

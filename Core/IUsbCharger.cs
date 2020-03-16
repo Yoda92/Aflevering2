@@ -17,7 +17,7 @@ namespace Core
         double CurrentValue { get; }
 
         // Require connection status of the phone
-        bool Connected { get; }
+        public bool Connected { get; set; }
 
         // Start charging
         void StartCharge();

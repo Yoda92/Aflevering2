@@ -19,7 +19,7 @@ namespace Core
         };
 
         public LadeskabState _state {get; set;}
-        private int _oldId;
+        public int _oldId;
 
         private IDisplay _display;
         private IDoor _door;
