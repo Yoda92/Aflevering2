@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Core;
 
 namespace UsbSimulator.Test
 {
@@ -16,6 +17,7 @@ namespace UsbSimulator.Test
         public void Setup()
         {
             _uut = new UsbChargerSimulator();
+            _uut.SimulateConnected(true);
         }
 
         [Test]
@@ -126,6 +128,7 @@ namespace UsbSimulator.Test
                 pause.Set();
             };
 
+            _uut.SimulateConnected(true);
 
             // Start
             _uut.StartCharge();

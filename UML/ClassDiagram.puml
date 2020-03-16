@@ -41,7 +41,6 @@ class StationControl {
     - _state: LadeskabState
     - HandleDoorStateChanged(\n  s: Object\n  e: DoorStateEventArgs)
     - HandleRFIDRead(\n  s: Object\n  e: DoorStateEventArgs)
-    - CheckID(newID: int): bool
 }
 
 enum LadeskabState <<enum>>{

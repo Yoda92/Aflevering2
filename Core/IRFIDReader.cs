@@ -2,7 +2,7 @@ using System;
 
 namespace Core
 {
-    public class RFIDReadEventArgs
+    public class RFIDReadEventArgs : EventArgs
     {
         public int ID { get; set; }
     }
