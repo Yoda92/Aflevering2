@@ -4,7 +4,7 @@ namespace Core
 {
     public class ChargeControl : IChargeControl
     {
-        private bool isCharging;
+        public bool IsCharging { get; private set; }
         private IDisplay _disp;
         private IUsbCharger _charger;
 
@@ -13,7 +13,7 @@ namespace Core
             _disp = disp;
             _charger = charger;
             _charger.CurrentValueEvent += HandleCurrentValueChanged;
-            isCharging = false;
+            IsCharging = false;
         }
 
         public bool IsConnected()
@@ -44,10 +44,10 @@ namespace Core
                 _disp.DisplayChargingMessage("Not charging...");
             } else if (current <= 500)
             {
-                if (!isCharging)
+                if (!IsCharging)
                 {
                     _disp.DisplayChargingMessage("Charging...");
-                    isCharging = true;
+                    IsCharging = true;
                 }
             }
             else // Above 500mA

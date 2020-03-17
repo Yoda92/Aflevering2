@@ -33,7 +33,7 @@ namespace Core
 
             else
             {
-                File.AppendAllText(@"Log.txt", "Door Locked with ID: " + ID + "\n");
+                File.AppendAllText(@"Log.txt", "Door Unlocked with ID: " + ID + "\n");
             }
             
         }

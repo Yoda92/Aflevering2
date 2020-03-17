@@ -26,14 +26,38 @@ namespace CoreTest
             _sc = new StationControl(_display, _door, _logfile, _RFIDReader, _usbCharger);
         }
         
-        [TestCase(false, StationControl.LadeskabState.DoorOpen, "Dør er lukket. Indlæs RFID.", StationControl.LadeskabState.Available)]
-        [TestCase(true, StationControl.LadeskabState.DoorOpen, "Dør er åben", StationControl.LadeskabState.DoorOpen)]
-        [TestCase(true, StationControl.LadeskabState.Available, "Dør er åben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
-        [TestCase(false, StationControl.LadeskabState.Available, "Dør er lukket. Indlæs RFID", StationControl.LadeskabState.Available)]
-        public void HandleDoorStateChangedTest(bool open, StationControl.LadeskabState inputState, string outputString, StationControl.LadeskabState outputState)
+        [Test]
+        public void ctor_IsAvailable()
         {
-            _sc._state = inputState;
+           Assert.That(_sc._state, Is.EqualTo(StationControl.LadeskabState.Available)); 
+        }
+
+        [Test]
+        public void ctor_IsListeneningToDoorEvents()
+        {
+           _door.Received().DoorStateChangedEvent += Arg.Any<EventHandler<DoorStateEventArgs>>();
+        }
+
+        [Test]
+        public void ctor_IsListeningToRFIDEvents()
+        {
+           _RFIDReader.Received().RFIDReadEvent += Arg.Any<EventHandler<RFIDReadEventArgs>>();
+        }
+        
+        [TestCase(false, "DÃ¸r er lukket. IndlÃ¦s RFID.", StationControl.LadeskabState.Available)]
+        [TestCase(true, "DÃ¸r er Ã¥ben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
+        public void HandleDoorStateChangedDoorOpenTest(bool open, string outputString, StationControl.LadeskabState outputState)
+        {
             _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() {Open = open});
+            _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
+            Assert.That(_sc._state, Is.EqualTo(outputState));
+        }
+
+        [TestCase(true, "DÃ¸r er Ã¥ben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
+        [TestCase(false, "DÃ¸r er lukket. IndlÃ¦s RFID.", StationControl.LadeskabState.Available)]
+        public void HandleDoorStateChangedAvailableTest(bool open, string outputString, StationControl.LadeskabState outputState)
+        {
+            _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() { Open = open });
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
             Assert.That(_sc._state, Is.EqualTo(outputState));
         }
@@ -41,7 +65,6 @@ namespace CoreTest
         [TestCase(10, "Ladeskab optaget.")]
         public void HandleRFIDReadAvaibleConnectedTest(int id, string outputString)
         {
-            _sc._state = StationControl.LadeskabState.Available;
             _usbCharger.Connected = true;
             _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {ID = id});
             _door.Received().LockDoor();
@@ -55,16 +78,15 @@ namespace CoreTest
         [TestCase("Tilslutningsfejl.")]
         public void HandleRFIDReadAvaibleNotConnectedTest(string outputString)
         {
-            _sc._state = StationControl.LadeskabState.Available;
             _usbCharger.Connected = false;
             _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {});
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
         }
 
-        [TestCase("Luk døren.")]
+        [TestCase("Luk dÃ¸ren.")]
         public void HandleRFIDReadDoorOpenTest(string outputString)
         {
-            _sc._state = StationControl.LadeskabState.DoorOpen;
+            _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() { Open = true });
             _usbCharger.Connected = false;
             _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {});
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
@@ -73,9 +95,9 @@ namespace CoreTest
         [TestCase(10, "Fjern telefon.")]
         public void HandleRFIDReadLockedEqualTest(int id, string outputString)
         {
-            _sc._state = StationControl.LadeskabState.Locked;
-            _sc._oldId = id;
-            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {ID = id });
+            _usbCharger.Connected = true;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() { ID = id });
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() { ID = id });
             _door.Received().UnlockDoor();
             _logfile.Received().LogDoorUnlocked(id);
             _usbCharger.Received().StopCharge();
@@ -86,9 +108,9 @@ namespace CoreTest
         [TestCase(10, "Forkert RFID tag.")]
         public void HandleRFIDReadLockedNotEqualTest(int id, string outputString)
         {
-            _sc._state = StationControl.LadeskabState.Locked;
-            _sc._oldId = id + 1;
-            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() {});
+            _usbCharger.Connected = true;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() { ID = (id + 1) });
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() { ID = id });
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
         }
     }
