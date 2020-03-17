@@ -26,10 +26,28 @@ namespace CoreTest
             _sc = new StationControl(_display, _door, _logfile, _RFIDReader, _usbCharger);
         }
         
-        [TestCase(false, StationControl.LadeskabState.DoorOpen, "Dør er lukket. Indlæs RFID.", StationControl.LadeskabState.Available)]
-        [TestCase(true, StationControl.LadeskabState.DoorOpen, "Dør er åben", StationControl.LadeskabState.DoorOpen)]
-        [TestCase(true, StationControl.LadeskabState.Available, "Dør er åben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
-        [TestCase(false, StationControl.LadeskabState.Available, "Dør er lukket. Indlæs RFID", StationControl.LadeskabState.Available)]
+        [Test]
+        public void ctor_IsAvailable()
+        {
+           Assert.That(_sc._state, Is.EqualTo(StationControl.LadeskabState.Available)); 
+        }
+
+        [Test]
+        public void ctor_IsListeneningToDoorEvents()
+        {
+           _door.Received().DoorStateChangedEvent += Arg.Any<EventHandler<DoorStateEventArgs>>();
+        }
+
+        [Test]
+        public void ctor_IsListeningToRFIDEvents()
+        {
+           _RFIDReader.Received().RFIDReadEvent += Arg.Any<EventHandler<RFIDReadEventArgs>>();
+        }
+        
+        [TestCase(false, StationControl.LadeskabState.DoorOpen, "DÃ¸r er lukket. IndlÃ¦s RFID.", StationControl.LadeskabState.Available)]
+        [TestCase(true, StationControl.LadeskabState.DoorOpen, "DÃ¸r er Ã¥ben", StationControl.LadeskabState.DoorOpen)]
+        [TestCase(true, StationControl.LadeskabState.Available, "DÃ¸r er Ã¥ben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
+        [TestCase(false, StationControl.LadeskabState.Available, "DÃ¸r er lukket. IndlÃ¦s RFID", StationControl.LadeskabState.Available)]
         public void HandleDoorStateChangedTest(bool open, StationControl.LadeskabState inputState, string outputString, StationControl.LadeskabState outputState)
         {
             _sc._state = inputState;
@@ -61,7 +79,7 @@ namespace CoreTest
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
         }
 
-        [TestCase("Luk døren.")]
+        [TestCase("Luk dÃ¸ren.")]
         public void HandleRFIDReadDoorOpenTest(string outputString)
         {
             _sc._state = StationControl.LadeskabState.DoorOpen;
