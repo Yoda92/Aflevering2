@@ -52,7 +52,7 @@ namespace RFIDReaderSimulator.test
         {
             _RFIDRead.SimulateReadRFID(8989);
 
-            Assert.That(_RFIDReadEventArgs.ID, Is.EqualTo(Valid_ID));
+            Assert.That(_RFIDReadEventArgs.ID, Is.Not.EqualTo(Valid_ID));
         }
 
 

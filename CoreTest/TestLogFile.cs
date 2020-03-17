@@ -19,6 +19,8 @@ namespace CoreTest
         }
 
         [TestCase(37)]
+        [TestCase(41)]
+        [TestCase(69)]
         public void TestLogDoorLocked(int ID)
         { 
             _l.LogDoorLocked(ID);
@@ -28,6 +30,8 @@ namespace CoreTest
         }
 
         [TestCase(17)]
+        [TestCase(37)]
+        [TestCase(52)]
         public void TestLogDoorUnlocked(int ID)
         {
             _l.LogDoorUnlocked(ID);
