@@ -20,6 +20,18 @@ namespace CoreTest
             _uut = new ChargeControl(_disp, _charger);
         }
 
+        [Test]
+        public void ctor_IsNotCharging()
+        {
+            Assert.That(_uut.IsCharging, Is.False);
+        }
+
+        [Test]
+        public void ctor_IsListeningToCurrentEvents()
+        {
+            _charger.Received().CurrentValueEvent += Arg.Any<EventHandler<CurrentEventArgs>>();
+        }
+
         [TestCase(true)]
         [TestCase(false)]
         public void IsConnectedReturnsValueOfUsbChargerConnected(bool connected)

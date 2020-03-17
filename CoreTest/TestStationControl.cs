@@ -26,8 +26,26 @@ namespace CoreTest
             _sc = new StationControl(_display, _door, _logfile, _RFIDReader, _usbCharger);
         }
         
-        [TestCase(false, "Dør er lukket. Indlæs RFID.", StationControl.LadeskabState.Available)]
-        [TestCase(true, "Dør er åben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
+        [Test]
+        public void ctor_IsAvailable()
+        {
+           Assert.That(_sc._state, Is.EqualTo(StationControl.LadeskabState.Available)); 
+        }
+
+        [Test]
+        public void ctor_IsListeneningToDoorEvents()
+        {
+           _door.Received().DoorStateChangedEvent += Arg.Any<EventHandler<DoorStateEventArgs>>();
+        }
+
+        [Test]
+        public void ctor_IsListeningToRFIDEvents()
+        {
+           _RFIDReader.Received().RFIDReadEvent += Arg.Any<EventHandler<RFIDReadEventArgs>>();
+        }
+        
+        [TestCase(false, "DÃ¸r er lukket. IndlÃ¦s RFID.", StationControl.LadeskabState.Available)]
+        [TestCase(true, "DÃ¸r er Ã¥ben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
         public void HandleDoorStateChangedDoorOpenTest(bool open, string outputString, StationControl.LadeskabState outputState)
         {
             _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() {Open = open});
@@ -35,8 +53,8 @@ namespace CoreTest
             Assert.That(_sc._state, Is.EqualTo(outputState));
         }
 
-        [TestCase(true, "Dør er åben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
-        [TestCase(false, "Dør er lukket. Indlæs RFID.", StationControl.LadeskabState.Available)]
+        [TestCase(true, "DÃ¸r er Ã¥ben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
+        [TestCase(false, "DÃ¸r er lukket. IndlÃ¦s RFID.", StationControl.LadeskabState.Available)]
         public void HandleDoorStateChangedAvailableTest(bool open, string outputString, StationControl.LadeskabState outputState)
         {
             _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() { Open = open });
@@ -80,7 +98,7 @@ namespace CoreTest
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
         }
 
-        [TestCase("Luk døren.")]
+        [TestCase("Luk dÃ¸ren.")]
         public void HandleRFIDReadDoorOpenTest(string outputString)
         {
             _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() { Open = true });
