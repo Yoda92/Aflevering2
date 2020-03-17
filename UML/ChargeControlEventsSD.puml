@@ -1,0 +1,25 @@
+@startuml
+participant IUsbCharger
+participant ChargeControl
+participant IDisplay
+
+->> IUsbCharger: CurrentEvent
+IUsbCharger ->> ChargeControl++: HandleCurrentValue-\nChanged(CurrentEvent)
+alt Current < 0
+ChargeControl ->> ChargeControl : Throw Error
+else current < 5
+ChargeControl -> IDisplay: DisplayChargingMessage\n("Finished Charging...")
+else current <= 500
+ChargeControl -> IDisplay: DisplayChargingMessage\n("Charging...")
+ChargeControl -> ChargeControl: IsCharging = true
+else else
+ChargeControl -> IDisplay: DisplayChargingMessage\n("Error - Stopped Charging!")
+ChargeControl -> ChargeControl++ : StopCharge()
+ChargeControl -> IUsbCharger++: StopCharge()
+return
+deactivate ChargeControl
+deactivate ChargeControl
+end
+
+
+@enduml
