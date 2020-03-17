@@ -65,7 +65,7 @@ namespace Core
                     }
                     else
                     {
-                        _display.DisplayUserInstructions("Dør er lukket. Indlæs RFID");
+                        _display.DisplayUserInstructions("Dør er lukket. Indlæs RFID.");
                     }
                     break;
 
