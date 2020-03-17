@@ -48,7 +48,8 @@ namespace CoreTest
         [TestCase(true, "Dør er åben. Tilslut telefon.", StationControl.LadeskabState.DoorOpen)]
         public void HandleDoorStateChangedDoorOpenTest(bool open, string outputString, StationControl.LadeskabState outputState)
         {
-            _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() {Open = open});
+            _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() {Open = true});
+            _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() { Open = open });
             _display.Received().DisplayUserInstructions(Arg.Is<string>(outputString));
             Assert.That(_sc._state, Is.EqualTo(outputState));
         }
