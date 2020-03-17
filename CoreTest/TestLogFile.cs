@@ -22,7 +22,7 @@ namespace CoreTest
         public void TestLogDoorLocked(int ID)
         { 
             _l.LogDoorLocked(ID);
-            string line = File.ReadLines(@"log.txt").Last();
+            string line = File.ReadLines(@"Log.txt").Last();
             string expected = string.Format("Door Locked with ID: " + ID); 
             Assert.AreEqual(expected, line);
         }
@@ -31,7 +31,7 @@ namespace CoreTest
         public void TestLogDoorUnlocked(int ID)
         {
             _l.LogDoorUnlocked(ID);
-            string line = File.ReadLines(@"log.txt").Last();
+            string line = File.ReadLines(@"Log.txt").Last();
             string expected = string.Format("Door Unlocked with ID: " + ID);
             Assert.AreEqual(expected, line);
         }
