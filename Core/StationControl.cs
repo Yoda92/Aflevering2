@@ -53,7 +53,7 @@ namespace Core
                     }
                     else
                     { 
-                        _display.DisplayUserInstructions("Dør er åben");
+                        _display.DisplayUserInstructions("Dør er åben. Tilslut telefon.");
                     }
                     break;
 
