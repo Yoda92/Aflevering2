@@ -62,6 +62,21 @@ namespace CoreTest
             Assert.That(_sc._state, Is.EqualTo(outputState));
         }
 
+        [Test]
+        public void HandleDoorStateChangedLockedTest()
+        {
+            _usbCharger.Connected = true;
+            _RFIDReader.RFIDReadEvent += Raise.EventWith<RFIDReadEventArgs>(new RFIDReadEventArgs() { });
+            _usbCharger.ClearReceivedCalls();
+            _RFIDReader.ClearReceivedCalls();
+            _door.DoorStateChangedEvent += Raise.EventWith<DoorStateEventArgs>(new DoorStateEventArgs() { Open = true });
+            _door.DidNotReceive();
+            _usbCharger.DidNotReceive();
+            _display.DidNotReceive();
+            _logfile.DidNotReceive();
+            _RFIDReader.DidNotReceive();
+        }
+
         [TestCase(10, "Ladeskab optaget.")]
         public void HandleRFIDReadAvaibleConnectedTest(int id, string outputString)
         {
