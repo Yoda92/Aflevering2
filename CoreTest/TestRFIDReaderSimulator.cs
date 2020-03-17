@@ -12,7 +12,7 @@ namespace RFIDReaderSimulator.test
     [TestFixture]
     class TestRFIDReaderSimulator
     {
-        private Core.RFIDReaderSimulator _uut;
+        private Core.RFIDReaderSimulator _RFIDRead;
         private RFIDReadEventArgs _RFIDReadEventArgs;
         int Valid_ID = 2323;
 
@@ -20,9 +20,9 @@ namespace RFIDReaderSimulator.test
         public void Setup()
         {
             _RFIDReadEventArgs = null;
-            _uut = new Core.RFIDReaderSimulator();
+            _RFIDRead = new Core.RFIDReaderSimulator();
 
-            _uut.RFIDReadEvent +=
+            _RFIDRead.RFIDReadEvent +=
                 (o, args) => { _RFIDReadEventArgs = args; };
         }
 
@@ -32,7 +32,7 @@ namespace RFIDReaderSimulator.test
 
         public void RFID_Read_EventFired()
         {
-            _uut.SimulateReadRFID(2323);
+            _RFIDRead.SimulateReadRFID(2323);
             Assert.That(_RFIDReadEventArgs.ID, Is.Not.Null);
         }
 
@@ -41,7 +41,7 @@ namespace RFIDReaderSimulator.test
 
         public void RFIDRead_Succes() 
         {
-            _uut.SimulateReadRFID(2323);
+            _RFIDRead.SimulateReadRFID(2323);
 
             Assert.That(_RFIDReadEventArgs.ID, Is.EqualTo(Valid_ID));
         }
@@ -50,7 +50,7 @@ namespace RFIDReaderSimulator.test
         [Test]
         public void RFIDRead_failed()
         {
-            _uut.SimulateReadRFID(8989);
+            _RFIDRead.SimulateReadRFID(8989);
 
             Assert.That(_RFIDReadEventArgs.ID, Is.EqualTo(Valid_ID));
         }
