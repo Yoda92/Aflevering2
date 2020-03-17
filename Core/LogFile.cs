@@ -13,21 +13,23 @@ namespace Core
         {
             if (!File.Exists(@"Log.txt"))
             {
-                File.Create(@"Log.txt");
+                var myFile = File.Create(@"Log.txt");
+                myFile.Close();
                 File.AppendAllText(@"Log.txt", "Door Locked with ID: " + ID + "\n");
             }
             else
             {
                 File.AppendAllText(@"Log.txt", "Door Locked with ID: " + ID + "\n");
             }
-            
+
         }
 
         public void LogDoorUnlocked(int ID)
         {
             if (!File.Exists(@"Log.txt"))
             {
-                File.Create(@"Log.txt");
+                var myFile = File.Create(@"Log.txt");
+                myFile.Close();
                 File.AppendAllText(@"Log.txt", "Door Unlocked with ID: " + ID + "\n");
             }
 
@@ -35,7 +37,7 @@ namespace Core
             {
                 File.AppendAllText(@"Log.txt", "Door Unlocked with ID: " + ID + "\n");
             }
-            
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Core;
 
 namespace ConsoleApp
@@ -26,9 +27,9 @@ namespace ConsoleApp
             _RFIDReaderSimulator.SimulateReadRFID(25);
             _RFIDReaderSimulator.SimulateReadRFID(125);
             _RFIDReaderSimulator.SimulateReadRFID(50);
+            Thread.Sleep(2000);
             _usbChargerSimulator.SimulateConnected(false);
             _doorSimulator.SimulateDoorClose();
-            while (true) { }
         }
 
     }
