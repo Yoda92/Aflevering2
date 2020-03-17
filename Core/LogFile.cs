@@ -14,7 +14,7 @@ namespace Core
             if (!File.Exists(@"Log.txt"))
             {
                 File.Create(@"Log.txt");
-                File.AppendAllText(@"Log.txt", "Log Created");
+                File.AppendAllText(@"Log.txt", "Door Locked with ID: " + ID + "\n");
             }
             else
             {
@@ -28,7 +28,7 @@ namespace Core
             if (!File.Exists(@"Log.txt"))
             {
                 File.Create(@"Log.txt");
-                File.AppendAllText(@"Log.txt", "Log Created");
+                File.AppendAllText(@"Log.txt", "Door Unlocked with ID: " + ID + "\n");
             }
 
             else
