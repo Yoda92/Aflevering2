@@ -37,8 +37,8 @@ class RFIDReadEventArgs {
 }
 
 class StationControl {
-    - _oldID: int
-    - _state: LadeskabState
+    +/- _oldID: int
+    +/- _state: LadeskabState
     - HandleDoorStateChanged(\n  s: Object\n  e: DoorStateEventArgs)
     - HandleRFIDRead(\n  s: Object\n  e: DoorStateEventArgs)
 }
@@ -54,6 +54,7 @@ interface IUSBCharger <<interface>>{
     + StartCharge(): void
     + StopCharge(): void
     -/+ Connected: bool
+    + CurrentValue: double
 }
 
 class CurrentValueEventArgs {
@@ -63,10 +64,13 @@ class CurrentValueEventArgs {
 
 class USBChargerSimulator {
     + CurrentValueEvent: event
+    + SimulateConnected(bool): void
+    + SimulateOverload(bool): void
     + StartCharge(): void
     + StopCharge(): void
     - OnCurrentValueChanged(\n  e: CurrentValueEventArgs): void
     -/+ Connected: bool
+    + CurrentValue: double
 }
 
 interface IChargeControl <<interface>>{
