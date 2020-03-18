@@ -18,8 +18,8 @@ namespace Core
             DoorOpen
         };
 
-        public LadeskabState _state {get; set;}
-        public int _oldId;
+        public LadeskabState _state {get; private set;}
+        public int _oldId { get; private set; }
 
         private IDisplay _display;
         private IDoor _door;
