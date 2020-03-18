@@ -29,6 +29,7 @@ namespace Core
         public void StopCharge()
         {
             _charger.StopCharge();
+            IsCharging = false;
         }
 
         private void HandleCurrentValueChanged(Object o, CurrentEventArgs args)
@@ -53,6 +54,7 @@ namespace Core
             else // Above 500mA
             {
                 _charger.StopCharge();
+                IsCharging = false;
                 _disp.DisplayChargingMessage("Error - Stopped Charging!");
             }
         }

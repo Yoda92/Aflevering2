@@ -1,0 +1,16 @@
+@startuml
+participant StationControl
+participant ChargeControl
+participant IUsbCharger
+
+StationControl -> ChargeControl++: IsConnected(): bool
+ChargeControl -> IUsbCharger++: Connected: bool
+return
+return
+
+StationControl -> ChargeControl++: StartCharge()\nStopCharge()
+ChargeControl -> IUsbCharger++: StartCharge()\nStopCharge()
+return
+return
+
+@enduml

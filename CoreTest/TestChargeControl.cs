@@ -80,6 +80,7 @@ namespace CoreTest
         {
             _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
             _disp.Received().DisplayChargingMessage(Arg.Is<String>("Charging...")); 
+            Assert.That(_uut.IsCharging, Is.True);
         }
 
         [TestCase(500.01)]
@@ -90,6 +91,7 @@ namespace CoreTest
             _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
             _disp.Received().DisplayChargingMessage(Arg.Is<String>("Error - Stopped Charging!"));
             _charger.Received().StopCharge();
+            Assert.That(_uut.IsCharging, Is.False);
         }
     }
 }

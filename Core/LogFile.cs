@@ -9,35 +9,23 @@ namespace Core
 {
     public class LogFile : ILogFile
     {
+        private string path;
+
+        public LogFile()
+        { 
+            path = @"Log.txt";
+            var myFile = File.Create(path);
+            myFile.Close();
+        }
+
         public void LogDoorLocked(int ID)
         {
-            if (!File.Exists(@"Log.txt"))
-            {
-                var myFile = File.Create(@"Log.txt");
-                myFile.Close();
-                File.AppendAllText(@"Log.txt", "Door Locked with ID: " + ID + "\n");
-            }
-            else
-            {
-                File.AppendAllText(@"Log.txt", "Door Locked with ID: " + ID + "\n");
-            }
-
+            File.AppendAllText(path, "Door Locked with ID: " + ID + "\n");
         }
 
         public void LogDoorUnlocked(int ID)
         {
-            if (!File.Exists(@"Log.txt"))
-            {
-                var myFile = File.Create(@"Log.txt");
-                myFile.Close();
-                File.AppendAllText(@"Log.txt", "Door Unlocked with ID: " + ID + "\n");
-            }
-
-            else
-            {
-                File.AppendAllText(@"Log.txt", "Door Unlocked with ID: " + ID + "\n");
-            }
-
+            File.AppendAllText(path, "Door Unlocked with ID: " + ID + "\n");
         }
     }
 }
