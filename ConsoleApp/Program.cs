@@ -43,14 +43,14 @@ namespace ConsoleApp
                         if (_stationControl._state == StationControl.LadeskabState.DoorOpen)
                         {
                             _usbChargerSimulator.SimulateConnected(!_usbChargerSimulator.Connected);
-                            _display.DisplayUserInstructions("Telephone connected: " + _usbChargerSimulator.Connected);
+                            Console.WriteLine("Telephone connected: " + _usbChargerSimulator.Connected);
                         }
-                        else _display.DisplayUserInstructions("Open door first!");
+                        else Console.WriteLine("Open door first!");
                         break;
 
                     case 'R':
-                        System.Console.WriteLine("Indtast RFID id: ");
-                        string idString = System.Console.ReadLine();
+                        Console.WriteLine("Indtast RFID id: ");
+                        string idString = Console.ReadLine();
 
                         int id = Convert.ToInt32(idString);
                         _RFIDReaderSimulator.SimulateReadRFID(id);
