@@ -42,7 +42,11 @@ namespace Core
             } 
             else if (current <= 5)
             {
-                _disp.DisplayChargingMessage("Finished Charging...");
+                if (IsCharging)
+                {
+                    _disp.DisplayChargingMessage("Finished Charging...");
+                    IsCharging = false;
+                }
             } else if (current <= 500)
             {
                 if (!IsCharging)

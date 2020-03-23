@@ -17,19 +17,50 @@ namespace ConsoleApp
             LogFile _logfile = new LogFile();
             StationControl _stationControl = new StationControl(_display, _doorSimulator, _logfile, _RFIDReaderSimulator, _usbChargerSimulator);
 
-            _doorSimulator.SimulateDoorOpen();
-            _usbChargerSimulator.SimulateConnected(true);
-            _doorSimulator.SimulateDoorClose();
-            _doorSimulator.SimulateDoorOpen();
-            _RFIDReaderSimulator.SimulateReadRFID(50);
-            _doorSimulator.SimulateDoorClose();
-            _RFIDReaderSimulator.SimulateReadRFID(50);
-            _RFIDReaderSimulator.SimulateReadRFID(25);
-            _RFIDReaderSimulator.SimulateReadRFID(125);
-            _RFIDReaderSimulator.SimulateReadRFID(50);
-            Thread.Sleep(2000);
-            _usbChargerSimulator.SimulateConnected(false);
-            _doorSimulator.SimulateDoorClose();
+            bool finish = false;
+            System.Console.WriteLine("Indtast E = Exit\nO = Open\nC = Close\nR = RFID Read\nT = Tilslut/Fjern telefon");
+            do
+            {
+                string input;
+                input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input)) continue;
+
+                switch (input[0])
+                {
+                    case 'E':
+                        finish = true;
+                        break;
+
+                    case 'O':
+                        _doorSimulator.SimulateDoorOpen();
+                        break;
+
+                    case 'C':
+                        _doorSimulator.SimulateDoorClose();
+                        break;
+
+                    case 'T':
+                        if (_stationControl._state == StationControl.LadeskabState.DoorOpen)
+                        {
+                            _usbChargerSimulator.SimulateConnected(!_usbChargerSimulator.Connected);
+                            _display.DisplayUserInstructions("Telephone connected: " + _usbChargerSimulator.Connected);
+                        }
+                        else _display.DisplayUserInstructions("Open door first!");
+                        break;
+
+                    case 'R':
+                        System.Console.WriteLine("Indtast RFID id: ");
+                        string idString = System.Console.ReadLine();
+
+                        int id = Convert.ToInt32(idString);
+                        _RFIDReaderSimulator.SimulateReadRFID(id);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            } while (!finish);
         }
 
     }
