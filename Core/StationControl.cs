@@ -25,15 +25,15 @@ namespace Core
         private IDoor _door;
         private ILogFile _logfile;
         private IRFIDReader _RFIDReader;
-        private IUsbCharger _usbCharger;
+        private IChargeControl _chargeControl;
 
-        public StationControl(IDisplay display, IDoor door, ILogFile logfile, IRFIDReader RFIDReader, IUsbCharger usbCharger)
+        public StationControl(IDisplay display, IDoor door, ILogFile logfile, IRFIDReader RFIDReader, IChargeControl chargeControl)
         {
             _display = display;
             _door = door;
             _logfile = logfile;
             _RFIDReader = RFIDReader;
-            _usbCharger = usbCharger;
+            _chargeControl = chargeControl;
 
             _state = LadeskabState.Available;
 
@@ -80,14 +80,14 @@ namespace Core
             switch (_state)
             {
                 case LadeskabState.Available:
-                    if (_usbCharger.Connected)
+                    if (_chargeControl.IsConnected())
                     {
                         _door.LockDoor();
                         _logfile.LogDoorLocked(e.ID);
                         _oldId = e.ID;
                         _state = LadeskabState.Locked;
                         _display.DisplayUserInstructions("Ladeskab optaget.");
-                        _usbCharger.StartCharge();
+                        _chargeControl.StartCharge();
                     }
                     else
                     {
@@ -102,7 +102,7 @@ namespace Core
                 case LadeskabState.Locked:
                     if (e.ID == _oldId)
                     {
-                        _usbCharger.StopCharge();
+                        _chargeControl.StopCharge();
                         _door.UnlockDoor();
                         _logfile.LogDoorUnlocked(e.ID);
                         _state = LadeskabState.Available;

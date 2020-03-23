@@ -45,6 +45,7 @@ namespace CoreTest
         {
             _uut.StartCharge();
             _charger.Received().StartCharge();
+            Assert.That(_uut.IsCharging, Is.True);
         }
 
         [Test]
@@ -52,6 +53,7 @@ namespace CoreTest
         {
             _uut.StopCharge();
             _charger.Received().StopCharge();
+            Assert.That(_uut.IsCharging, Is.False);
         }
 
 
@@ -62,16 +64,23 @@ namespace CoreTest
                 _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = -1.0}),
                 Throws.TypeOf<Exception>());
         }
+        
+        [Test]
+        public void HandleCurrentZero()
+        {
+            _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = 0});
+            _disp.Received().DisplayChargingMessage(Arg.Is<string>("Finished Charging..."));
+        }
 
         [TestCase(0.01)]
         [TestCase(3.0)]
         [TestCase(5.0)]
         public void HandleCurrentChangedBetweenZeroAndFive(double current)
         {
-            _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() { Current = 10 });
             _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
-            _disp.Received().DisplayChargingMessage(Arg.Is<string>("Finished Charging..."));
+            _charger.Received().StopCharge();
         }
+
 
         [TestCase(5.01)]
         [TestCase(25.0)]
@@ -80,8 +89,7 @@ namespace CoreTest
         public void HandleCurrentChangedBetweenFiveAndFiveHundred(double current)
         {
             _charger.CurrentValueEvent += Raise.EventWith<CurrentEventArgs>(new CurrentEventArgs() {Current = current});
-            _disp.Received().DisplayChargingMessage(Arg.Is<String>("Charging...")); 
-            Assert.That(_uut.IsCharging, Is.True);
+            _disp.Received().DisplayChargingMessage(Arg.Is<String>($"Charging: current:{current}")); 
         }
 
         [TestCase(500.01)]

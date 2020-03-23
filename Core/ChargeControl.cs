@@ -23,7 +23,8 @@ namespace Core
 
         public void StartCharge()
         {
-           _charger.StartCharge(); 
+           _charger.StartCharge();
+           IsCharging = true;
         }
 
         public void StopCharge()
@@ -39,21 +40,19 @@ namespace Core
             {
                 //In a real system this would be handled otherwise, but we wanted to experiment with testing errors
                 throw new Exception("Subzero current read");
+            }
+
+            if (current == 0)
+            {
+                _disp.DisplayChargingMessage("Finished Charging...");
             } 
             else if (current <= 5)
             {
-                if (IsCharging)
-                {
-                    _disp.DisplayChargingMessage("Finished Charging...");
-                    IsCharging = false;
-                }
-            } else if (current <= 500)
+                _charger.StopCharge();
+            } 
+            else if (current <= 500)
             {
-                if (!IsCharging)
-                {
-                    _disp.DisplayChargingMessage("Charging...");
-                    IsCharging = true;
-                }
+                _disp.DisplayChargingMessage($"Charging: current:{current}");
             }
             else // Above 500mA
             {

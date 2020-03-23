@@ -15,7 +15,7 @@ namespace ConsoleApp
             RFIDReaderSimulator _RFIDReaderSimulator = new RFIDReaderSimulator();
             DoorSimulator _doorSimulator = new DoorSimulator();
             LogFile _logfile = new LogFile();
-            StationControl _stationControl = new StationControl(_display, _doorSimulator, _logfile, _RFIDReaderSimulator, _usbChargerSimulator);
+            StationControl _stationControl = new StationControl(_display, _doorSimulator, _logfile, _RFIDReaderSimulator, _chargeControl);
 
             bool finish = false;
             System.Console.WriteLine("Indtast E = Exit\nO = Open\nC = Close\nR = RFID Read\nT = Tilslut/Fjern telefon");
